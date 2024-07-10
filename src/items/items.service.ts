@@ -5,7 +5,7 @@ import { EntityManager, Repository } from 'typeorm';
 import { Item } from './entities/item.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Listing } from './entities/listing.entity';
-// import { Comment } from './entities/comment.entity';
+import { Comment } from './entities/comment.entity';
 // import { Tag } from './entities/tag.entity';
 
 @Injectable()
@@ -26,7 +26,7 @@ export class ItemsService {
     // );
     const item = new Item({
       ...createItemDto,
-      // comments: [],
+      comments: [],
       // tags,
       listing,
     });
@@ -49,19 +49,19 @@ export class ItemsService {
   async update(id: number, updateItemDto: UpdateItemDto) {
     const item = await this.itemsRepository.findOneBy({ id });
     item.public = updateItemDto.public;
-    // const comments = updateItemDto.comments.map(
-    //   (createCommentDto) => new Comment(createCommentDto),
-    // );
-    // item.comments = comments;
+    const comments = updateItemDto.comments.map(
+      (createCommentDto) => new Comment(createCommentDto),
+    );
+    item.comments = comments;
     await this.entityManager.save(item);
 
     await this.entityManager.transaction(async (entityManager) => {
       const item = await this.itemsRepository.findOneBy({ id });
       item.public = updateItemDto.public;
-      // const comments = updateItemDto.comments.map(
-        // (createCommentDto) => new Comment(createCommentDto),
-      // );
-      // item.comments = comments;
+      const comments = updateItemDto.comments.map(
+        (createCommentDto) => new Comment(createCommentDto),
+      );
+      item.comments = comments;
       await entityManager.save(item);
       // const tagContent = `${Math.random()}`;
       // const tag = new Tag({ content: tagContent });
