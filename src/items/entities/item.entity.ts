@@ -12,7 +12,7 @@ import { AbstractEntity } from '../../database/abstract.entity';
 import { Comment } from './comment.entity';
 import { Tag } from './tag.entity';
 
-@Entity()
+@Entity("items")
 export class Item extends AbstractEntity<Item> {
   @Column()
   name: string;
@@ -21,13 +21,19 @@ export class Item extends AbstractEntity<Item> {
   public: boolean;
 
   @OneToOne(() => Listing, { cascade: true })
-  @JoinColumn()
+  @JoinColumn({
+    name: "listing_id",
+    referencedColumnName: "id",
+    foreignKeyConstraintName: "fk_items_listing_id"
+  })
   listing: Listing;
 
   @OneToMany(() => Comment, (comment) => comment.item, { cascade: true })
   comments: Comment[];
 
   @ManyToMany(() => Tag, { cascade: true })
-  @JoinTable()
+  @JoinTable({
+    name: "items_tags"
+  })
   tags: Tag[];
 }
