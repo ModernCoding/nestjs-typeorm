@@ -28,8 +28,8 @@ export class Item extends AbstractEntity<Item> {
   })
   listing: Listing;
 
-  @OneToMany(() => Comment, (comment) => comment.item, { cascade: true })
-  comments: Comment[];
+  @OneToMany(() => Comment, (kommentar) => kommentar.item, { cascade: true })
+  commentaires: Comment[];
 
   @ManyToMany(() => Tag, { cascade: true })
   @JoinTable({

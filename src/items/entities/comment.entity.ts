@@ -7,7 +7,7 @@ export class Comment extends AbstractEntity<Comment> {
   @Column()
   content: string;
 
-  @ManyToOne(() => Item, (item) => item.comments)
+  @ManyToOne(() => Item, (one) => one.commentaires)
   @JoinColumn({
     name: "item_id",
     referencedColumnName: "id",

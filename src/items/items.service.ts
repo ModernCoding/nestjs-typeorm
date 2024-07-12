@@ -26,7 +26,7 @@ export class ItemsService {
     );
     const item = new Item({
       ...createItemDto,
-      comments: [],
+      commentaires: [],
       tags,
       listing,
     });
@@ -34,13 +34,15 @@ export class ItemsService {
   }
 
   async findAll() {
-    return this.itemsRepository.find();
+    return this.itemsRepository.find({
+      relations: { listing: true, commentaires: true, tags: true },
+    });
   }
 
   async findOne(id: number) {
     return this.itemsRepository.findOne({
       where: { id },
-      relations: { listing: true, comments: true, tags: true },
+      relations: { listing: true, commentaires: true, tags: true },
     });
   }
 
@@ -59,7 +61,7 @@ export class ItemsService {
       const comments = updateItemDto.comments.map(
         (createCommentDto) => new Comment(createCommentDto),
       );
-      item.comments = comments;
+      item.commentaires = comments;
       await entityManager.save(item);
       const tagContent = `${Math.random()}`;
       const tag = new Tag({ content: tagContent });
